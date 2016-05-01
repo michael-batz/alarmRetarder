@@ -8,6 +8,10 @@ alarmStore = {}
 # callback function for receiving traps
 def trapReceived(snmpEngine, stateReference, contextEngineId, contextName, varBinds, cbCtx):
     print("Trap Received")
+    for varBind in varBinds:
+        varBindName = varBind[0]
+        varBindValue = varBind[1]
+        print("    " + varBindName.prettyPrint() + ": " + varBindValue.prettyPrint())
 
 # create and configure SNMP engine
 snmpEngine = engine.SnmpEngine()
