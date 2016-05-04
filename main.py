@@ -1,34 +1,20 @@
 #! /usr/bin/python3
-from pysnmp.entity import engine, config
-from pysnmp.carrier.asynsock.dgram import udp
-from pysnmp.entity.rfc3413 import ntfrcv
+
+from alarm import Alarm
+from SnmpTrapReceiver import SnmpTrapReceiver
+import time
 
 alarmStore = {}
-
-# callback function for receiving traps
-def trapReceived(snmpEngine, stateReference, contextEngineId, contextName, varBinds, cbCtx):
-    print("Trap Received")
-    for varBind in varBinds:
-        varBindName = varBind[0]
-        varBindValue = varBind[1]
-        print("    " + varBindName.prettyPrint() + ": " + varBindValue.prettyPrint())
-
-# create and configure SNMP engine
-snmpEngine = engine.SnmpEngine()
-config.addTransport(
-    snmpEngine,
-    udp.domainName + (1,),
-    udp.UdpTransport().openServerMode(('127.0.0.1', 162))
-)
-config.addV1System(snmpEngine, 'my-area', 'public')
-
-# register callback function
-ntfrcv.NotificationReceiver(snmpEngine, trapReceived)
-
-# start dispatcher
-snmpEngine.transportDispatcher.jobStarted(1)
-try:
-    snmpEngine.transportDispatcher.runDispatcher()
-except:
-    snmpEngine.transportDispatcher.closeDispatcher()
-    raise
+trapReceiver = SnmpTrapReceiver(alarmStore)
+trapReceiver.start()
+time.sleep(10)
+print("test1")
+print(alarmStore)
+time.sleep(10)
+print("test2")
+print(alarmStore)
+time.sleep(10)
+print("test4")
+print(alarmStore)
+time.sleep(100)
+alarm1 = Alarm(1, '04-05-2016', 'Dies ist ein Testalarm')
