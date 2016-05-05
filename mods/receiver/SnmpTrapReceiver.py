@@ -1,15 +1,9 @@
-#! /usr/bin/python3
-import  threading
+from .Receiver import Receiver
 from pysnmp.entity import engine, config
 from pysnmp.carrier.asynsock.dgram import udp
 from pysnmp.entity.rfc3413 import ntfrcv
 
-class SnmpTrapReceiver(threading.Thread):
-
-    def __init__(self, alarmStore):
-        threading.Thread.__init__(self)
-        self.alarmStore = alarmStore
-        self.alarmCounter = 0
+class SnmpTrapReceiver(Receiver):
 
     def run(self):
         # callback function for receiving traps
@@ -19,11 +13,12 @@ class SnmpTrapReceiver(threading.Thread):
                 varBindName = varBind[0]
                 varBindValue = varBind[1]
                 print("    " + varBindName.prettyPrint() + ": " + varBindValue.prettyPrint())
-            
-            alarmId = self.alarmCounter
-            alarmObject = 'Dies ist eine Testmessage'
-            self.alarmCounter = self.alarmCounter + 1
-            self.alarmStore[alarmId] = alarmObject
+            alertType = "alert type"
+            alertKey = "alert key"
+            alertId = "12"
+            alertSeverity = 5
+            alertLogmessage = "This is a test alert"
+            self.scheduleAlert(alertId, alertType, alertKey, alertSeverity, alertLogmessage)
 
         # create and configure SNMP engine
         snmpEngine = engine.SnmpEngine()
