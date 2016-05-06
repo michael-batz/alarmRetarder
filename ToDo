@@ -1,0 +1,9 @@
+ToDos
+- configuration option
+- make scheduler thread safe (locking)
+- documentation
+- SMSeagle forwarder
+- test with OpenNMS
+- Docker image
+- shutdown handling
+- license adding
