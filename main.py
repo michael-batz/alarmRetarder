@@ -7,8 +7,8 @@ from mods.scheduler.Scheduler import Scheduler
 from mods.config.Config import Config
 
 config = Config("./etc/config.ini")
-forwarder = SmsEagleForwarder(config)
-#forwarder = StdoutForwarder(config)
+#forwarder = SmsEagleForwarder(config)
+forwarder = StdoutForwarder(config)
 scheduler = Scheduler(config, forwarder)
 receiver = SnmpTrapReceiver(config, scheduler)
 

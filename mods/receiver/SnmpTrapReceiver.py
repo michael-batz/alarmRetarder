@@ -9,7 +9,7 @@ class SnmpTrapReceiver(Receiver):
         # callback function for receiving traps
         def trapReceived(snmpEngine, stateReference, contextEngineId, contextName, varBinds, cbCtx):
             print("Trap Received")
-            alertId = "0"
+            alertId = ""
             alertType = "" 
             alertKey = ""
             alertSeverity = ""

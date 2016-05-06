@@ -13,7 +13,9 @@ class Scheduler(threading.Thread):
         self.events = {}
 
     # add alert to queue
-    def addAlert(self, alert, delay):
+    def addAlert(self, alert):
+        # get delay from config (in seconds)
+        delay = int(self.config.getValue('general', 'alertdelay', '60'))
         # if alert is a problem
         if alert.getType() == "1":
             # check if alert with that key is already defined

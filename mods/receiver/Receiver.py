@@ -11,7 +11,7 @@ class Receiver(threading.Thread):
 
     def scheduleAlert(self, id, type, key, severity, logmessage):
         alert = Alert(id, type, key, severity, logmessage)
-        self.scheduler.addAlert(alert, 10)
+        self.scheduler.addAlert(alert)
 
     def run(self):
         raise ImplementationError()
