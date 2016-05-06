@@ -13,7 +13,7 @@ class SnmpTrapReceiver(Receiver):
                 varBindName = varBind[0]
                 varBindValue = varBind[1]
                 print("    " + varBindName.prettyPrint() + ": " + varBindValue.prettyPrint())
-            alertType = "alert type"
+            alertType = 1
             alertKey = "alert key"
             alertId = "12"
             alertSeverity = 5

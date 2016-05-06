@@ -16,9 +16,11 @@ class Alert:
     def getId(self):
         return self.id
 
+    # returns alarm type (1 = PROBLEM, 2 = SOLUTION)
     def getType(self):
         return self.type
 
+    # returns alert key (reduction key)
     def getKey(self):
         return self.key
 
