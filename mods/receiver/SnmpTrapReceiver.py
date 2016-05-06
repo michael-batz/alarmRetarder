@@ -9,15 +9,25 @@ class SnmpTrapReceiver(Receiver):
         # callback function for receiving traps
         def trapReceived(snmpEngine, stateReference, contextEngineId, contextName, varBinds, cbCtx):
             print("Trap Received")
+            alertId = "0"
+            alertType = "" 
+            alertKey = ""
+            alertSeverity = ""
+            alertLogmessage = ""
             for varBind in varBinds:
-                varBindName = varBind[0]
-                varBindValue = varBind[1]
-                print("    " + varBindName.prettyPrint() + ": " + varBindValue.prettyPrint())
-            alertType = 1
-            alertKey = "alert key"
-            alertId = "12"
-            alertSeverity = 5
-            alertLogmessage = "This is a test alert"
+                varBindName = str(varBind[0])
+                varBindValue = str(varBind[1])
+                if varBindName == "1.3.6.1.4.1.99999.3.1":
+                    alertId = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.2":
+                    alertType = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.3":
+                    alertKey = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.4":
+                    alertSeverity = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.5":
+                    alertLogmessage = varBindValue
+                print("    " + varBindName  + ": " + varBindValue)
             self.scheduleAlert(alertId, alertType, alertKey, alertSeverity, alertLogmessage)
 
         # create and configure SNMP engine

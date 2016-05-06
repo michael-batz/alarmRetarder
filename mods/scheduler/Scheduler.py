@@ -14,7 +14,7 @@ class Scheduler(threading.Thread):
     # add alert to queue
     def addAlert(self, alert, delay):
         # if alert is a problem
-        if alert.getType() == 1:
+        if alert.getType() == "1":
             # check if alert with that key is already defined
             try:
                 self.events[alert.getKey()]
@@ -23,7 +23,7 @@ class Scheduler(threading.Thread):
                 schedulerEvent = self.alertScheduler.enter(delay, 1, self.forwardAlert, argument=(alert,))
                 self.events[alert.getKey()] = schedulerEvent
         # if alert is a solution
-        if alert.getType() == 2:
+        if alert.getType() == "2":
             # check if alert with that key exists
             try:
                 self.events[alert.getKey()]
@@ -32,9 +32,9 @@ class Scheduler(threading.Thread):
                 pass
             else:
                 # if event is None, alert is already sent
-                if self.events[alert.getKey()] == None:
+                if self.events[alert.getKey()] is None:
                     # send resolved alert
-                    self.forwardResolvedAlert(self, alert)
+                    self.forwardResolvedAlert(alert)
                 else:
                     # cancel scheduling
                     self.alertScheduler.cancel(self.events[alert.getKey()])
