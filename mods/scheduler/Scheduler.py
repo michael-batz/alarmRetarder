@@ -4,9 +4,10 @@ import threading
 
 class Scheduler(threading.Thread):
 
-    def __init__(self, forwarder):
+    def __init__(self, config, forwarder):
         threading.Thread.__init__(self)
         self.alertScheduler = sched.scheduler(time.time, time.sleep)
+        self.config = config
         self.forwarder = forwarder
         # dictionary with mapping alertKey -> scheduling event
         self.events = {}

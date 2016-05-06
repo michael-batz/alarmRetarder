@@ -4,9 +4,10 @@ from ..scheduler.Scheduler import Scheduler
 
 class Receiver(threading.Thread):
 
-    def __init__(self, scheduler):
+    def __init__(self, config, scheduler):
         threading.Thread.__init__(self)
         self.scheduler = scheduler
+        self.config = config
 
     def scheduleAlert(self, id, type, key, severity, logmessage):
         alert = Alert(id, type, key, severity, logmessage)
