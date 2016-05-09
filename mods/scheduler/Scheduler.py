@@ -4,12 +4,14 @@ import threading
 
 class Scheduler(threading.Thread):
 
-    def __init__(self, config, forwarder):
+    def __init__(self, config, forwarder, runEvent):
         threading.Thread.__init__(self)
         self.lockEvents = threading.RLock()
         self.alertScheduler = sched.scheduler(time.time, time.sleep)
         self.config = config
         self.forwarder = forwarder
+        self.runEvent = runEvent
+
         # dictionary with mapping alertKey -> scheduling event
         self.lockEvents.acquire()
         self.events = {}
@@ -65,6 +67,6 @@ class Scheduler(threading.Thread):
 
     # run the scheduler
     def run(self):
-        while 1:
+        while self.runEvent.is_set():
             self.alertScheduler.run()
-            time.sleep(10)
+            time.sleep(1)

@@ -6,7 +6,12 @@ from pysnmp.entity.rfc3413 import ntfrcv
 class SnmpTrapReceiver(Receiver):
 
     def run(self):
-        # callback function for receiving traps
+        # callback function: shutdown handler
+        def checkShutdown(timeNow):
+            if self.runEvent.is_set() == False:
+                snmpEngine.transportDispatcher.jobFinished(1)
+
+        # callback function: receiving a trap
         def trapReceived(snmpEngine, stateReference, contextEngineId, contextName, varBinds, cbCtx):
             print("Trap Received")
             alertId = ""
@@ -56,6 +61,9 @@ class SnmpTrapReceiver(Receiver):
 	
         # register callback function
         ntfrcv.NotificationReceiver(snmpEngine, trapReceived)
+
+        # register timer callback function
+        snmpEngine.transportDispatcher.registerTimerCbFun(checkShutdown)
 	
         # start dispatcher
         snmpEngine.transportDispatcher.jobStarted(1)
