@@ -14,10 +14,16 @@ class SnmpTrapReceiver(Receiver):
             alertKey = ""
             alertSeverity = ""
             alertLogmessage = ""
+            configSection = ""
+            configKey = ""
+            configValue = ""
+            trapOid = ""
             for varBind in varBinds:
                 varBindName = str(varBind[0])
                 varBindValue = str(varBind[1])
-                if varBindName == "1.3.6.1.4.1.99999.3.1":
+                if varBindName == "1.3.6.1.6.3.1.1.4.1.0":
+                    trapOid = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.1":
                     alertId = varBindValue
                 elif varBindName == "1.3.6.1.4.1.99999.3.2":
                     alertType = varBindValue
@@ -27,8 +33,17 @@ class SnmpTrapReceiver(Receiver):
                     alertSeverity = varBindValue
                 elif varBindName == "1.3.6.1.4.1.99999.3.5":
                     alertLogmessage = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.10":
+                    configSection = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.11":
+                    configKey = varBindValue
+                elif varBindName == "1.3.6.1.4.1.99999.3.12":
+                    configValue = varBindValue
                 print("    " + varBindName  + ": " + varBindValue)
-            self.scheduleAlert(alertId, alertType, alertKey, alertSeverity, alertLogmessage)
+            if trapOid == "1.3.6.1.4.1.99999.3.0.1":
+                self.scheduleAlert(alertId, alertType, alertKey, alertSeverity, alertLogmessage)
+            elif trapOid == "1.3.6.1.4.1.99999.3.0.2":
+                self.setConfigOption(configSection, configKey, configValue)
 
         # create and configure SNMP engine
         snmpEngine = engine.SnmpEngine()

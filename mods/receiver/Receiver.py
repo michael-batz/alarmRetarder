@@ -13,5 +13,8 @@ class Receiver(threading.Thread):
         alert = Alert(id, type, key, severity, logmessage)
         self.scheduler.addAlert(alert)
 
+    def setConfigOption(self, sectionName, key, value):
+        self.config.setValue(sectionName, key, value)
+
     def run(self):
         raise ImplementationError()
