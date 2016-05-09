@@ -6,16 +6,22 @@ class Scheduler(threading.Thread):
 
     def __init__(self, config, forwarder):
         threading.Thread.__init__(self)
+        self.lockEvents = threading.RLock()
         self.alertScheduler = sched.scheduler(time.time, time.sleep)
         self.config = config
         self.forwarder = forwarder
         # dictionary with mapping alertKey -> scheduling event
+        self.lockEvents.acquire()
         self.events = {}
+        self.lockEvents.release()
 
     # add alert to queue
     def addAlert(self, alert):
         # get delay from config (in seconds)
         delay = int(self.config.getValue('general', 'alertdelay', '60'))
+
+        # lock on events var
+        self.lockEvents.acquire()
         # if alert is a problem
         if alert.getType() == "1":
             # check if alert with that key is already defined
@@ -43,12 +49,16 @@ class Scheduler(threading.Thread):
                     self.alertScheduler.cancel(self.events[alert.getKey()])
                 # remove event from dictionary
                 del self.events[alert.getKey()]
+        # release lock on events var
+        self.lockEvents.release()
 
 
     # forward alert using the configured forwarder
     def forwardAlert(self, alert):
         self.forwarder.sendAlert(alert)
+        self.lockEvents.acquire()
         self.events[alert.getKey()] = None
+        self.lockEvents.release()
 
     def forwardResolvedAlert(self, alert):
         self.forwarder.sendAlert(alert)
