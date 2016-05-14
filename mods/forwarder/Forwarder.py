@@ -6,6 +6,5 @@ class Forwarder:
     def sendAlert(self, alert):
         pass
 
-
     def sendConfigChangedAlert(self, sectionName, key, oldValue, value):
         pass

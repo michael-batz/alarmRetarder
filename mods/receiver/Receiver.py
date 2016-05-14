@@ -11,13 +11,17 @@ class Receiver(threading.Thread):
         self.runEvent = runEvent
 
     def scheduleAlert(self, id, type, key, severity, logmessage):
+        # create and schedule alert
         alert = Alert(id, type, key, severity, logmessage)
         self.scheduler.addAlert(alert)
 
     def setConfigOption(self, sectionName, key, value):
+        # get old value and change config
         oldValue = self.config.getValue(sectionName, key, "")
-        self.config.setValue(sectionName, key, value)
-        self.scheduler.addConfigChangedAlert(sectionName, key, oldValue, value)
+        if oldValue != value:
+            self.config.setValue(sectionName, key, value)
+            # send ConfigChangedAlert
+            self.scheduler.addConfigChangedAlert(sectionName, key, oldValue, value)
 
     def run(self):
         raise ImplementationError()

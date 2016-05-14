@@ -54,6 +54,7 @@ class Scheduler(threading.Thread):
         # release lock on events var
         self.lockEvents.release()
 
+    # send ConfigChangedAlert directly to forwarder object
     def addConfigChangedAlert(self, sectionName, key, oldValue, value):
         self.forwarder.sendConfigChangedAlert(sectionName, key, oldValue, value)
 
