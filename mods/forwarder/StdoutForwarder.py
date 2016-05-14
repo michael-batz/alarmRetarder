@@ -3,11 +3,8 @@ from .Forwarder import Forwarder
 class StdoutForwarder(Forwarder):
 
     def sendAlert(self, alert):
-        output = "Alert: "
-        output += alert.getId()
-        output += "\n"
+        output = "Alert " + alert.getId() + ": "
         output += alert.getLogmessage()
-        output += "\n"
 
         self.logger.info("Output: %s", output)
         print(output)

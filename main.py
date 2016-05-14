@@ -16,8 +16,8 @@ basedir = os.path.dirname(__file__)
 
 # get configuration
 config = Config(basedir + "/etc/config.conf")
-classNameForwarder = config.getValue('general', 'fowarder', 'StdoutForwarder')
-classNameReceiver = config.getValue('general', 'fowarder', 'SnmpTrapReceiver')
+classNameForwarder = config.getValue('general', 'forwarder', 'StdoutForwarder')
+classNameReceiver = config.getValue('general', 'receiver', 'SnmpTrapReceiver')
 
 # create logging config
 logging.basedir = basedir + "/logs"

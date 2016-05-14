@@ -9,7 +9,7 @@ class SmsEagleForwarder(Forwarder):
        
     def sendConfigChangedAlert(self, sectionName, key, oldValue, value):
         # check, if target phone number was changed
-        if sectionName == "SmsEagleForwarder" & key == "target":
+        if (sectionName == "SmsEagleForwarder") & (key == "target"):
             message = "Agent logged out (new agent is " + value + ")"
             self.sendMessage(message, oldValue)
             message = "Agent logged in (old agent was " + oldValue + ")"
@@ -41,5 +41,8 @@ class SmsEagleForwarder(Forwarder):
         self.logger.info("Send SMS to %s: %s", target, message)
 
         # send HTTP GET request
-        requests.get(url, params=urlParameters)
+        try:
+            requests.get(url, params=urlParameters)
+        except:
+            self.logger.error("Error sending SMS. Problem in communication with SMS Eagle")
  

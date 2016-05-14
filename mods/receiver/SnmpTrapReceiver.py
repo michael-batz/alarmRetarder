@@ -44,10 +44,10 @@ class SnmpTrapReceiver(Receiver):
                 elif varBindName == "1.3.6.1.4.1.99999.3.12":
                     configValue = varBindValue
             if trapOid == "1.3.6.1.4.1.99999.3.0.1":
-                self.logger.debug("alert trap received: id=%s, type=%s, key=%s, severity=%s, logmsg=%s", alertId, alertType, alertKey, alertSeverity, alertLogmessage)
+                self.logger.info("alert trap received: id=%s, type=%s, key=%s, severity=%s, logmsg=%s", alertId, alertType, alertKey, alertSeverity, alertLogmessage)
                 self.scheduleAlert(alertId, alertType, alertKey, alertSeverity, alertLogmessage)
             elif trapOid == "1.3.6.1.4.1.99999.3.0.2":
-                self.logger.debug("config trap received: section=%s, key=%s, value=%s", configSection, configKey, configValue)
+                self.logger.info("config trap received: section=%s, key=%s, value=%s", configSection, configKey, configValue)
                 self.setConfigOption(configSection, configKey, configValue)
             else:
                 self.logger.warn("trap with no matching configuration received")
