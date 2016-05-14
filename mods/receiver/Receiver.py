@@ -15,7 +15,9 @@ class Receiver(threading.Thread):
         self.scheduler.addAlert(alert)
 
     def setConfigOption(self, sectionName, key, value):
+        oldValue = self.config.getValue(sectionName, key, "")
         self.config.setValue(sectionName, key, value)
+        self.scheduler.addConfigChangedAlert(sectionName, key, oldValue, value)
 
     def run(self):
         raise ImplementationError()
