@@ -1,4 +1,5 @@
 import threading
+import logging
 from ..entities.Alert import Alert
 from ..scheduler.Scheduler import Scheduler
 
@@ -9,6 +10,7 @@ class Receiver(threading.Thread):
         self.scheduler = scheduler
         self.config = config
         self.runEvent = runEvent
+        self.logger = logging.getLogger("receiver")
 
     def scheduleAlert(self, id, type, key, severity, logmessage):
         # create and schedule alert

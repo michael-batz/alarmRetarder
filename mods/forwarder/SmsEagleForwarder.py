@@ -37,6 +37,9 @@ class SmsEagleForwarder(Forwarder):
             "message" : message
         }
 
+        # log message
+        self.logger.info("Send SMS to %s: %s", target, message)
+
         # send HTTP GET request
         requests.get(url, params=urlParameters)
  

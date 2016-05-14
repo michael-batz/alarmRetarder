@@ -7,11 +7,16 @@ from mods.scheduler.Scheduler import Scheduler
 from mods.config.Config import Config
 import threading
 import time
+import logging
+import logging.config
 
 # get configuration
 config = Config("./etc/config.ini")
 classNameForwarder = config.getValue('general', 'fowarder', 'StdoutForwarder')
 classNameReceiver = config.getValue('general', 'fowarder', 'SnmpTrapReceiver')
+
+# create logging config
+logging.config.fileConfig("./etc/logging.conf")
 
 # create threading event
 runEvent = threading.Event()

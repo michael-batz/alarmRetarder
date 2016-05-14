@@ -1,6 +1,7 @@
 import sched
 import time
 import threading
+import logging
 
 class Scheduler(threading.Thread):
 
@@ -11,6 +12,7 @@ class Scheduler(threading.Thread):
         self.config = config
         self.forwarder = forwarder
         self.runEvent = runEvent
+        self.logger = logging.getLogger("scheduler")
 
         # dictionary with mapping alertKey -> scheduling event
         self.lockEvents.acquire()

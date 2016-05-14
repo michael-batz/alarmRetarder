@@ -8,10 +8,14 @@ class StdoutForwarder(Forwarder):
         output += "\n"
         output += alert.getLogmessage()
         output += "\n"
+
+        self.logger.info("Output: %s", output)
         print(output)
 
     def sendConfigChangedAlert(self, sectionName, key, oldValue, value):
         output = "Config Changed: "
         output += sectionName + "." + key + ": "
         output += oldValue + " -> " + value
+
+        self.logger.info("Output: %s", output)
         print(output)
