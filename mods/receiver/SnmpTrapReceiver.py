@@ -50,14 +50,19 @@ class SnmpTrapReceiver(Receiver):
             elif trapOid == "1.3.6.1.4.1.99999.3.0.2":
                 self.setConfigOption(configSection, configKey, configValue)
 
+        # get configuration
+        configListenAddress = self.config.getValue("SnmpTrapReceiver", "listenaddress", "127.0.0.1")
+        configListenPort = int(self.config.getValue("SnmpTrapReceiver", "listenport", "162"))
+        configCommunity = self.config.getValue("SnmpTrapReceiver", "community", "public")
+
         # create and configure SNMP engine
         snmpEngine = engine.SnmpEngine()
         config.addTransport(
             snmpEngine,
 	        udp.domainName + (1,),
-		    udp.UdpTransport().openServerMode(('127.0.0.1', 162))
+		    udp.UdpTransport().openServerMode((configListenAddress, configListenPort))
         )
-        config.addV1System(snmpEngine, 'my-area', 'public')
+        config.addV1System(snmpEngine, 'my-area', configCommunity)
 	
         # register callback function
         ntfrcv.NotificationReceiver(snmpEngine, trapReceived)
