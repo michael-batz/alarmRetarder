@@ -9,14 +9,19 @@ import threading
 import time
 import logging
 import logging.config
+import os
+
+# get directory name
+basedir = os.path.dirname(__file__)
 
 # get configuration
-config = Config("./etc/config.ini")
+config = Config(basedir + "/etc/config.conf")
 classNameForwarder = config.getValue('general', 'fowarder', 'StdoutForwarder')
 classNameReceiver = config.getValue('general', 'fowarder', 'SnmpTrapReceiver')
 
 # create logging config
-logging.config.fileConfig("./etc/logging.conf")
+logging.basedir = basedir + "/logs"
+logging.config.fileConfig(basedir + "/etc/logging.conf")
 
 # create threading event
 runEvent = threading.Event()
