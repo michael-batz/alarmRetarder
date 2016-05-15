@@ -9,4 +9,4 @@ RUN apt-get update -y \
     && apt-get install -y python3 python3-pysnmp4
 
 # start alarmRetarder
-RUN /opt/alarmRetarder/main.py
+CMD /opt/alarmRetarder/main.py
