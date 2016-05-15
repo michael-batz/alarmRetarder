@@ -1,0 +1,219 @@
+= alarmRetarder Guide
+Michael Batz <mail@michael-batz.de>
+:toc: left
+:toclevels: 2
+:icons: font
+:source-highlighter: pygments
+
+== Introduction
+alarmRetarder is a small tool, that receives alarm messages using a specified receiver (e.g. via SNMP traps), reduces identical messages and schedules them for forwarding. The forwarding of messages will be delayed using a configured value (e.g. 60 seconds). A configured forwarder (e.g. sending SMS) will be used to send alarm messges to the target. 
+
+Each alarm message containes the following fields:
+
+* ID
+* type (1 = problem, 2 = resolution)
+* severity 
+* timestamp
+* key
+* logmessage
+
+Each alarm message has a type, which could be "problem" (1) or "resolution" (2). A problem means, that there is something, which needs attention. All alarm messages of type problem with the same key will be reduced to one. A resolution alarm message resolves a problem alarm message with the same key. 
+
+If a problem alarm message occurs, it will be delayed using the configured interval. If the problem is resolved (with a resolution alarm message) within that interval, the message will not be forwarded to the user.
+
+The tool was designed for the network management plattform OpenNMS and the SNMP trap northbounder (OpenNMS version 17.1.0 or higher), but may be useful for other use cases, too.
+
+
+== Setup
+alarmRetarder is written in Python3 and all you need, are the following libraries:
+
+* pysnmp4
+* requests
+
+If all the libraries are installed, simply execute main.py and alarmRetarder is running:
+
+[source, bash]
+----
+./main.py
+----
+
+== Configuration
+The configuration will be stored in configuration files in the _etc_ subdirectory. You can find the following files:
+
+* config.conf: general configuration
+* logging.conf: log configuration
+
+=== General configuration (_config.conf_)
+Please have a look at the following example of the config.conf file:
+
+[source, ini]
+.config.conf
+----
+[general]
+alertdelay = 60
+forwarder = StdoutForwarder
+receiver = SnmpTrapReceiver
+
+[SnmpTrapReceiver]
+listenAddress = 0.0.0.0
+listenPort = 162
+community = public
+
+[SmsEagleForwarder]
+url = http://127.0.0.1/index.php/http_api/send_sms
+user = admin
+password = admin
+target = +49123456789
+----
+
+There is a _general_ section, which holds the general configuration of alarmRetarder. For each part of the software, there can be own sections with own configuration options.
+
+In the _general_ section, the following options can be set:
+|===
+|option |description |example
+
+|alertdelay
+|delay in seconds before forwarding the messages
+|60
+
+|forwarder
+|class of the forwarder, which forwards messages. Please see sections below for a descritpion of available forwarders.
+|SmsEagleForwarder
+
+|receiver
+|class of the receiver, which receives messages. Please see sections below for a descritpion of available receivers.
+|SnmpTrapReceiver
+|===
+
+
+
+==== Receiver
+The following receivers are available at the moment to receive alarm messages:
+
+
+===== SnmpTrapReceiver
+Receives alarm messsages that come in by SNMPv1 trap. The following configuration options are available:
+
+
+[source, ini]
+----
+[SnmpTrapReceiver]
+listenAddress = 0.0.0.0
+listenPort = 162
+community = public
+----
+
+|===
+|option |description |example
+
+|listenAddress
+|listen interface for receiving SNMP traps
+|0.0.0.0 or 127.0.0.1
+
+|listenPort
+|UDP port for receiving SNMP traps
+|162
+
+|community
+|SNMP community that messages have to match
+|public
+|===
+
+
+There are two SNMP traps, that are supported by alarmRetarder. An alert trap is used for getting alarm messages and has the following structure:
+
+|===
+|variable |description
+
+|trap OID
+|1.3.6.1.4.1.99999.3
+
+|generic trap type
+|6
+
+|specific trap type
+|1
+
+|varbinds
+|1.3.6.1.4.1.99999.3.1: alertId +
+ 1.3.6.1.4.1.99999.3.2: alertType +
+ 1.3.6.1.4.1.99999.3.3: alertKey +
+ 1.3.6.1.4.1.99999.3.4: alertSeverity +
+ 1.3.6.1.4.1.99999.3.5: alertLogmessage
+|===
+
+
+With config traps, the configuration in _config.conf_ can be changed at runtime:
+
+|===
+|variable |description
+
+|trap OID
+|1.3.6.1.4.1.99999.3
+
+|generic trap type
+|6
+
+|specific trap type
+|2
+
+|varbinds
+|1.3.6.1.4.1.99999.3.10: configSection +
+ 1.3.6.1.4.1.99999.3.11: configKey +
+ 1.3.6.1.4.1.99999.3.12: configValue 
+|===
+
+NOTE: Not all configuration options can be changed at runtime. At the moment, the forwarder and receiver options in the general section can not be changed at runtime.
+
+==== Forwarder
+A forwarder sends messages after the delay out to the target. The following forwarders are available at the moment:
+
+===== StdoutForwarder
+The StdoutForwarder simply prints out messages to Stdout. It does not have any configuration option and is for test purposes.
+
+
+===== SmsEagleForwarder
+The SmsEagleForwarder sends SMS to a mobile phone using an http://www.smseagle.eu[SMSEagle] gateway. The HTTP API is used and the following configuration options are available:
+
+[source, ini]
+----
+[SmsEagleForwarder]
+url = http://127.0.0.1/index.php/http_api/send_sms
+user = admin
+password = admin
+target = +49123456789
+----
+|===
+|option |description |example
+
+|url
+|URL of the SMSEagle HTTP API
+|http://127.0.0.1/index.php/http_api/send_sms
+
+|user
+|username of the SMSEagle HTTP API
+|admin
+
+|password
+|password of the SMSEagle HTTP API
+|admin
+
+|target
+|phone number, which gets the SMS messages
+|+49123456789
+|===
+
+TIP: If the target phone number was changed at runtime via a special message (e.g. the SnmpTrapReceiver config trap), an info message will be sent to the old and the new phone number.
+
+
+=== Logging configuration (_logging.conf_)
+In the file _logging.conf_, the logging of alarmRetarder is configured. It is a standard Python logging configuration file in configparser format and understands all options, that are allowed here.
+
+For every part of alarmRetarder (receiver, scheduler, forwarder), a logger is configured and can be changed to fit your needs.
+
+By default, the logs are written to files in the _logs_ subdirectory. Only warnings and errors from receiver and scheduler were logged and info messages of forwarder, which contains all forwarded messages.
+
+== Example Use Cases
+
+== Support
+If you have questions, found a bug or have an idea to enhance alarmRetarder, please open an issue at the https://github.com/michael-batz/alarmRetarder[GitHub project].
