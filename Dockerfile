@@ -2,7 +2,7 @@ FROM ubuntu:latest
 MAINTAINER Michael Batz <mail@michael-batz.de>
 
 # copy repository to /opt
-COPY * /opt/alarmRetarder/
+COPY ./ /opt/alarmRetarder/
 
 # install required software
 RUN apt-get update -y \
