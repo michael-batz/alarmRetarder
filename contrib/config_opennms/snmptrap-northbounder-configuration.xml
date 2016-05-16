@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<snmptrap-northbounder-config>
+	<enabled>true</enabled>
+	<nagles-delay>1000</nagles-delay>
+	<batch-size>100</batch-size>
+	<queue-size>300000</queue-size>
+
+	<snmp-trap-sink>
+		<name>alarmretarder</name>
+		<ip-address>alarmretarder</ip-address> <!-- You could use either an IPv4/IPv6 address or a FQDN -->
+		<version>v1</version>
+		<port>162</port>
+		<mapping-group name="alarmRetarder">
+			<rule>uei matches '.*'</rule>
+			<mapping name="problem">
+				<rule>(alarmType == AlarmType.PROBLEM) || (alarmType == AlarmType.NOTIFICATION) </rule>
+				<enterprise-oid>.1.3.6.1.4.1.99999.3</enterprise-oid>
+				<specific>1</specific>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.1</oid>
+					<type>OctetString</type>
+					<value>id</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.2</oid>
+					<type>OctetString</type>
+					<value>1</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.3</oid>
+					<type>OctetString</type>
+					<value>alarmKey</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.4</oid>
+					<type>OctetString</type>
+					<value>severity</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.5</oid>
+					<type>OctetString</type>
+					<value>logMsg</value>
+				</varbind>
+			</mapping>
+			<mapping name="resolution">
+				<rule>alarmType == AlarmType.RESOLUTION</rule>
+				<enterprise-oid>.1.3.6.1.4.1.99999.3</enterprise-oid>
+				<specific>1</specific>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.1</oid>
+					<type>OctetString</type>
+					<value>id</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.2</oid>
+					<type>OctetString</type>
+					<value>2</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.3</oid>
+					<type>OctetString</type>
+					<value>clearKey</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.4</oid>
+					<type>OctetString</type>
+					<value>severity</value>
+				</varbind>
+				<varbind>
+					<oid>1.3.6.1.4.1.99999.3.5</oid>
+					<type>OctetString</type>
+					<value>logMsg</value>
+				</varbind>
+			</mapping>
+		</mapping-group>
+	</snmp-trap-sink>
+</snmptrap-northbounder-config>
