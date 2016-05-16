@@ -25,6 +25,8 @@ The tool was designed for the network management plattform OpenNMS and the SNMP 
 
 
 == Setup
+
+=== Manually setup your environment
 alarmRetarder is written in Python3 and all you need, are the following libraries:
 
 * pysnmp4
@@ -36,6 +38,26 @@ If all the libraries are installed, simply execute main.py and alarmRetarder is 
 ----
 ./main.py
 ----
+
+=== Start a Docker Container
+There is also a Docker image for alarmRetarder on https://hub.docker.com/r/michaelbatz/alarmretarder/[Docker Hub] or you can build it by your own using the _Dockerfile_ in the main directoy of alarmRetarder.
+
+alarmRetarder is installed in _/opt/alarmRetarder_ with its default configuration. If you want to use your own configuration, map your own configuration file in the container with volumes.
+
+Please hava a look at the following docker-compose.yml example:
+
+[source, yml]
+.docker-compose.yml
+----
+version: "2"
+services:
+  alarmretarder:
+     image: michaelbatz/alarmretarder
+     volumes:
+      - ./data/alarmretarder/etc/config.conf:/opt/alarmRetarder/etc/config.conf
+      - ./data/alarmretarder/logs:/opt/alarmRetarder/logs
+----
+
 
 == Configuration
 The configuration will be stored in configuration files in the _etc_ subdirectory. You can find the following files:
@@ -214,6 +236,12 @@ For every part of alarmRetarder (receiver, scheduler, forwarder), a logger is co
 By default, the logs are written to files in the _logs_ subdirectory. Only warnings and errors from receiver and scheduler were logged and info messages of forwarder, which contains all forwarded messages.
 
 == Example Use Cases
+
+=== alarmRetarder and OpenNMS
+alarmRetarder was designed to handle alarms from the network management plattform http://www.opennms.org[OpenNMS] and forward them by SMS. 
+
+Since version 17.1.0, OpenNMS has the feature SNMP trap northbound interface, which forwards OpenNMS alarms to a third party tool using SNMP traps. This feature can be used to send alarm messages to the SnmpTrapReceiver of alarmRetarder. To configure this feature in OpenNMS, the configuration file _snmptrap-northbounder-configuration.xml_ needs to be changed. In the alarmRetarder _contrib_ directory, you can find an example configuration for OpenNMS, that was tested with alarmRetarder.
+
 
 == Support
 If you have questions, found a bug or have an idea to enhance alarmRetarder, please open an issue at the https://github.com/michael-batz/alarmRetarder[GitHub project].
