@@ -9,7 +9,7 @@ class SmsEagleForwarder(Forwarder):
        
     def sendConfigChangedAlert(self, sectionName, key, oldValue, value):
         # check, if target phone number was changed
-        if (sectionName == "SmsEagleForwarder") & (key == "target"):
+        if sectionName == "SmsEagleForwarder" and key == "target":
             message = "Agent logged out (new agent is " + value + ")"
             self.sendMessage(message, oldValue)
             message = "Agent logged in (old agent was " + oldValue + ")"
