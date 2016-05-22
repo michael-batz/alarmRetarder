@@ -23,7 +23,8 @@ class SmsEagleForwarder(Forwarder):
 
     def sendMessage(self, message, target=None):
         # create URL for SMS Eagle
-        url = self.config.getValue("SmsEagleForwarder", "url", "http://127.0.0.1/index.php/http_api/send_sms")
+        url = self.config.getValue("SmsEagleForwarder", "url", 
+                                   "http://127.0.0.1/index.php/http_api/send_sms")
 
         # check if a value for target is set
         if target is None:

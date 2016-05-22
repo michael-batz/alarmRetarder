@@ -31,12 +31,15 @@ class Scheduler(threading.Thread):
             # check if alert with that key is already defined
             try:
                 self.events[alert.getKey()]
-                self.logger.debug("alert with type problem and key %s is already scheduled", alert.getKey())
+                self.logger.debug("alert with type problem and key %s is already scheduled", 
+                                  alert.getKey())
             except KeyError:
                 # if no alert exists, schedule alert and save the event in dictionary
-                schedulerEvent = self.alertScheduler.enter(delay, 1, self.forwardAlert, argument=(alert,))
+                schedulerEvent = self.alertScheduler.enter(delay, 1, self.forwardAlert, 
+                                                           argument=(alert,))
                 self.events[alert.getKey()] = schedulerEvent
-                self.logger.debug("schedule problem alert with key %s in %s seconds", alert.getKey(), delay)
+                self.logger.debug("schedule problem alert with key %s in %s seconds", 
+                                  alert.getKey(), delay)
         # if alert is a solution
         if alert.getType() == "2":
             # check if alert with that key exists
@@ -44,17 +47,20 @@ class Scheduler(threading.Thread):
                 self.events[alert.getKey()]
             # if not: ignore
             except KeyError:
-                self.logger.debug("problem alert for resolution with key %s not found", alert.getKey())
+                self.logger.debug("problem alert for resolution with key %s not found", 
+                                  alert.getKey())
             else:
                 # if event is None, alert is already sent
                 if self.events[alert.getKey()] is None:
                     # send resolved alert
                     self.forwardResolvedAlert(alert)
-                    self.logger.debug("resolution for problem alert with key %s found, sending resolved message", alert.getKey())
+                    self.logger.debug("resolution for problem alert with key %s found, "
+                                      "sending resolved message", alert.getKey())
                 else:
                     # cancel scheduling
                     self.alertScheduler.cancel(self.events[alert.getKey()])
-                    self.logger.debug("resolution for problem alert with key %s found, alert not sent, removing alert from list", alert.getKey())
+                    self.logger.debug("resolution for problem alert with key %s found, "
+                                      "alert not sent, removing alert from list", alert.getKey())
                 # remove event from dictionary
                 del self.events[alert.getKey()]
         # release lock on events var
