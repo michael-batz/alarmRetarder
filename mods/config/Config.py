@@ -34,7 +34,7 @@ class Config:
         except:
             self.config[sectionName] = {}
         self.config[sectionName][key] = value
-        
+
         # save configuration file
         with open(self.filename, 'w') as configfile:
             self.config.write(configfile)

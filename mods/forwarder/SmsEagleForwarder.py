@@ -1,12 +1,11 @@
 import requests
 from .Forwarder import Forwarder
 
-
 class SmsEagleForwarder(Forwarder):
 
     def sendAlert(self, alert):
         self.sendMessage(alert.getLogmessage())
-       
+
     def sendConfigChangedAlert(self, sectionName, key, oldValue, value):
         # check, if target phone number was changed
         if sectionName == "SmsEagleForwarder" and key == "target":
@@ -23,7 +22,7 @@ class SmsEagleForwarder(Forwarder):
 
     def sendMessage(self, message, target=None):
         # create URL for SMS Eagle
-        url = self.config.getValue("SmsEagleForwarder", "url", 
+        url = self.config.getValue("SmsEagleForwarder", "url",
                                    "http://127.0.0.1/index.php/http_api/send_sms")
 
         # check if a value for target is set
@@ -46,4 +45,3 @@ class SmsEagleForwarder(Forwarder):
             requests.get(url, params=urlParameters)
         except:
             self.logger.error("Error sending SMS. Problem in communication with SMS Eagle")
- 

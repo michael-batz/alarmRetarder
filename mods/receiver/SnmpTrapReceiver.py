@@ -14,7 +14,7 @@ class SnmpTrapReceiver(Receiver):
         # callback function: receiving a trap
         def trapReceived(snmpEngine, stateReference, contextEngineId, contextName, varBinds, cbCtx):
             alertId = ""
-            alertType = "" 
+            alertType = ""
             alertKey = ""
             alertSeverity = ""
             alertLogmessage = ""
@@ -45,11 +45,11 @@ class SnmpTrapReceiver(Receiver):
                     configValue = varBindValue
             if trapOid == "1.3.6.1.4.1.99999.3.0.1":
                 self.logger.info("alert trap received: id=%s, type=%s, key=%s, "
-                                 "severity=%s, logmsg=%s", alertId, alertType, alertKey, 
+                                 "severity=%s, logmsg=%s", alertId, alertType, alertKey,
                                  alertSeverity, alertLogmessage)
                 self.scheduleAlert(alertId, alertType, alertKey, alertSeverity, alertLogmessage)
             elif trapOid == "1.3.6.1.4.1.99999.3.0.2":
-                self.logger.info("config trap received: section=%s, key=%s, value=%s", 
+                self.logger.info("config trap received: section=%s, key=%s, value=%s",
                                  configSection, configKey, configValue)
                 self.setConfigOption(configSection, configKey, configValue)
             else:
@@ -68,13 +68,13 @@ class SnmpTrapReceiver(Receiver):
 		    udp.UdpTransport().openServerMode((configListenAddress, configListenPort))
         )
         config.addV1System(snmpEngine, 'my-area', configCommunity)
-	
+
         # register callback function
         ntfrcv.NotificationReceiver(snmpEngine, trapReceived)
 
         # register timer callback function
         snmpEngine.transportDispatcher.registerTimerCbFun(checkShutdown)
-	
+
         # start dispatcher
         snmpEngine.transportDispatcher.jobStarted(1)
         try:

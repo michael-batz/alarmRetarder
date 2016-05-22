@@ -27,4 +27,3 @@ class Receiver(threading.Thread):
 
     def run(self):
         raise ImplementationError()
-
