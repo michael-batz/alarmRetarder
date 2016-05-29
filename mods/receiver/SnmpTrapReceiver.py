@@ -105,9 +105,9 @@ class SnmpTrapReceiver(Receiver):
                 self.logger.warn("trap with no matching configuration received")
 
         # get configuration
-        configListenAddress = self.config.getValue("SnmpTrapReceiver", "listenaddress", "127.0.0.1")
-        configListenPort = int(self.config.getValue("SnmpTrapReceiver", "listenport", "162"))
-        configCommunity = self.config.getValue("SnmpTrapReceiver", "community", "public")
+        configListenAddress = self.config.get_value("SnmpTrapReceiver", "listenaddress", "127.0.0.1")
+        configListenPort = int(self.config.get_value("SnmpTrapReceiver", "listenport", "162"))
+        configCommunity = self.config.get_value("SnmpTrapReceiver", "community", "public")
 
         # create and configure SNMP engine
         snmpEngine = engine.SnmpEngine()

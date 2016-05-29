@@ -50,7 +50,7 @@ class Scheduler(threading.Thread):
             None.
         """
         # get delay from config (in seconds)
-        delay = int(self.config.getValue('general', 'alertdelay', '60'))
+        delay = int(self.config.get_value('general', 'alertdelay', '60'))
 
         # lock on events var
         self.lockEvents.acquire()

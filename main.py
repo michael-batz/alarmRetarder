@@ -4,7 +4,7 @@ from mods.forwarder.StdoutForwarder import StdoutForwarder
 from mods.forwarder.SmsEagleForwarder import SmsEagleForwarder
 from mods.receiver.SnmpTrapReceiver import SnmpTrapReceiver
 from mods.scheduler.Scheduler import Scheduler
-from mods.config.Config import Config
+from mods.config.config import Config
 import threading
 import time
 import logging
@@ -16,8 +16,8 @@ basedir = os.path.dirname(__file__)
 
 # get configuration
 config = Config(basedir + "/etc/config.conf")
-classNameForwarder = config.getValue('general', 'forwarder', 'StdoutForwarder')
-classNameReceiver = config.getValue('general', 'receiver', 'SnmpTrapReceiver')
+classNameForwarder = config.get_value('general', 'forwarder', 'StdoutForwarder')
+classNameReceiver = config.get_value('general', 'receiver', 'SnmpTrapReceiver')
 
 # create logging config
 logging.basedir = basedir + "/logs"

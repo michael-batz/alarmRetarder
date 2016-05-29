@@ -75,17 +75,17 @@ class SmsEagleForwarder(Forwarder):
                 configuration value should be used.
         """
         # create URL for SMS Eagle
-        url = self.config.getValue("SmsEagleForwarder", "url",
+        url = self.config.get_value("SmsEagleForwarder", "url",
                                    "http://127.0.0.1/index.php/http_api/send_sms")
 
         # check if a value for target is set
         if target is None:
-            target = self.config.getValue("SmsEagleForwarder", "target", "+49123456789")
+            target = self.config.get_value("SmsEagleForwarder", "target", "+49123456789")
 
         # setup URL parameters
         urlParameters = {
-            "login" : self.config.getValue("SmsEagleForwarder", "user", "admin"),
-            "pass" : self.config.getValue("SmsEagleForwarder", "password", "admin"),
+            "login" : self.config.get_value("SmsEagleForwarder", "user", "admin"),
+            "pass" : self.config.get_value("SmsEagleForwarder", "password", "admin"),
             "to" : target,
             "message" : message
         }
