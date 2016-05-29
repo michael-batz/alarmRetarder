@@ -19,8 +19,8 @@ class Forwarder(object):
 
     def __init__(self, config):
         """inits the Forwarder class"""
-        self.__config = config
-        self.__logger = logging.getLogger("forwarder")
+        self._config = config
+        self._logger = logging.getLogger("forwarder")
 
     def send_alert(self, alert):
         """Sends out an alert.
@@ -123,29 +123,29 @@ class SmsEagleForwarder(Forwarder):
                 configuration value should be used.
         """
         # create URL for SMS Eagle
-        url = self.__config.get_value("SmsEagleForwarder", "url",
-                                      "http://127.0.0.1/index.php/http_api/send_sms")
+        url = self._config.get_value("SmsEagleForwarder", "url",
+                                     "http://127.0.0.1/index.php/http_api/send_sms")
 
         # check if a value for target is set
         if target is None:
-            target = self.__config.get_value("SmsEagleForwarder", "target", "+49123456789")
+            target = self._config.get_value("SmsEagleForwarder", "target", "+49123456789")
 
         # setup URL parameters
         url_parameters = {
-            "login" : self.__config.get_value("SmsEagleForwarder", "user", "admin"),
-            "pass" : self.__config.get_value("SmsEagleForwarder", "password", "admin"),
+            "login" : self._config.get_value("SmsEagleForwarder", "user", "admin"),
+            "pass" : self._config.get_value("SmsEagleForwarder", "password", "admin"),
             "to" : target,
             "message" : message
         }
 
         # log message
-        self.__logger.info("Send SMS to %s: %s", target, message)
+        self._logger.info("Send SMS to %s: %s", target, message)
 
         # send HTTP GET request
         try:
             requests.get(url, params=url_parameters)
         except:
-            self.__logger.error("Error sending SMS. Problem in communication with SMS Eagle")
+            self._logger.error("Error sending SMS. Problem in communication with SMS Eagle")
 
 class StdoutForwarder(Forwarder):
     """Forwards alerts using standard output.
@@ -168,7 +168,7 @@ class StdoutForwarder(Forwarder):
         output = "Alert " + alert.get_id() + ": "
         output += alert.get_logmessage()
 
-        self.__logger.info("Output: %s", output)
+        self._logger.info("Output: %s", output)
         print(output)
 
     def send_config_changed_alert(self, section_name, key, old_value, value):
@@ -190,5 +190,5 @@ class StdoutForwarder(Forwarder):
         output += section_name + "." + key + ": "
         output += old_value + " -> " + value
 
-        self.__logger.info("Output: %s", output)
+        self._logger.info("Output: %s", output)
         print(output)

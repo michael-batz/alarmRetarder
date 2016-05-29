@@ -2,7 +2,7 @@
 
 from mods.forwarder.forwarder import StdoutForwarder
 from mods.forwarder.forwarder import SmsEagleForwarder
-from mods.receiver.SnmpTrapReceiver import SnmpTrapReceiver
+from mods.receiver.receiver import SnmpTrapReceiver
 from mods.scheduler.Scheduler import Scheduler
 from mods.config.config import Config
 import threading
