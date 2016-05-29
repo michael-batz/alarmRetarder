@@ -9,7 +9,7 @@ import logging
 from pysnmp.entity import engine, config
 from pysnmp.carrier.asynsock.dgram import udp
 from pysnmp.entity.rfc3413 import ntfrcv
-from ..entities.entities import Alert
+from .entities import Alert
 
 class Receiver(threading.Thread):
     """ An alarm receiver.
