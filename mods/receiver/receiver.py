@@ -50,7 +50,7 @@ class Receiver(threading.Thread):
             None
         """
         alert = Alert(alert_id, alert_type, alert_key, alert_severity, alert_logmessage)
-        self._scheduler.addAlert(alert)
+        self._scheduler.add_alert(alert)
 
     def set_config_option(self, section_name, key, value):
         """Sets a configuration option.
@@ -71,7 +71,7 @@ class Receiver(threading.Thread):
         if old_value != value:
             self.__config.set_value(section_name, key, value)
             # send ConfigChangedAlert
-            self._scheduler.addConfigChangedAlert(section_name, key, old_value, value)
+            self._scheduler.add_config_changed_alert(section_name, key, old_value, value)
 
     def run(self):
         """Receive function.
