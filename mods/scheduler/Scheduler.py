@@ -1,11 +1,27 @@
+"""Scheduler module.
+
+This module defines the scheduler part of alarmRetarder.
+"""
 import sched
 import time
 import threading
 import logging
 
 class Scheduler(threading.Thread):
+    """Scheduler class.
+
+    This is the class definition of the alarmRetarder Scheduler, which
+    is the main part of the software.
+
+    Attributes:
+        config: an object for accessing the configuration.
+        forwarder: a forwarder object to forward messages.
+        runEvent: a threading.Event for checking the shutdown state of
+            the application.
+    """
 
     def __init__(self, config, forwarder, runEvent):
+        """inits the Scheduler class."""
         threading.Thread.__init__(self)
         self.lockEvents = threading.RLock()
         self.alertScheduler = sched.scheduler(time.time, time.sleep)
@@ -19,8 +35,20 @@ class Scheduler(threading.Thread):
         self.events = {}
         self.lockEvents.release()
 
-    # add alert to queue
     def addAlert(self, alert):
+        """Adds an alert to Scheduling queue.
+
+        If an alarm was received by a receiver, it will be scheduled
+        with this function. This function checks, if the alert is a
+        problem or resolution or dupplicate of an existing alarm and
+        handles the received alarm in the correct way.
+
+        Args:
+            alert: alert object.
+
+        Returns:
+            None.
+        """
         # get delay from config (in seconds)
         delay = int(self.config.getValue('general', 'alertdelay', '60'))
 
@@ -66,14 +94,36 @@ class Scheduler(threading.Thread):
         # release lock on events var
         self.lockEvents.release()
 
-    # send ConfigChangedAlert directly to forwarder object
     def addConfigChangedAlert(self, sectionName, key, oldValue, value):
+        """Sends a config changed alert.
+
+        This function will be executed to send an alert to the
+        forwarder object if the configuration was changed.
+
+        Args:
+            sectionName: name of the changed config section.
+            key: key of the changed config option.
+            oldValue: old value of the changed config option.
+            value: new value of the changed config option.
+
+        Returns:
+            None.
+        """
         self.logger.debug("forward config changed alert")
         self.forwarder.sendConfigChangedAlert(sectionName, key, oldValue, value)
 
 
-    # forward alert using the configured forwarder
     def forwardAlert(self, alert):
+        """Sends out a problem alert.
+
+        This function sends a problem alert to the forwarder object.
+
+        Args:
+            alert: an alert object.
+
+        Returns:
+            None.
+        """
         self.logger.debug("forward alert with key %s", alert.getKey())
         self.forwarder.sendAlert(alert)
         self.lockEvents.acquire()
@@ -81,11 +131,25 @@ class Scheduler(threading.Thread):
         self.lockEvents.release()
 
     def forwardResolvedAlert(self, alert):
+        """Sends out a resolution alert.
+
+        This function sends a resolution alert to the forwarder object.
+
+        Args:
+            alert: an alert object.
+
+        Returns:
+            None.
+        """
         self.logger.debug("forward resolved alert with key %s", alert.getKey())
         self.forwarder.sendAlert(alert)
 
-    # run the scheduler
     def run(self):
+        """Start the Scheduler.
+
+        This is the run function of the Scheduler which starts the
+        Scheduler in a new thread.
+        """
         while self.runEvent.is_set():
             self.alertScheduler.run()
             time.sleep(1)
