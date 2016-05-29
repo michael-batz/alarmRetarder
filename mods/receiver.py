@@ -67,9 +67,9 @@ class Receiver(threading.Thread):
             None
         """
         # get old value and change config
-        old_value = self.__config.get_value(section_name, key, "")
+        old_value = self._config.get_value(section_name, key, "")
         if old_value != value:
-            self.__config.set_value(section_name, key, value)
+            self._config.set_value(section_name, key, value)
             # send ConfigChangedAlert
             self._scheduler.add_config_changed_alert(section_name, key, old_value, value)
 

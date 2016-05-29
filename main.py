@@ -1,4 +1,9 @@
 #! /usr/bin/python3
+"""alarmRetarder main module.
+
+This is the main module of alarmReatarder.
+To start alarmRetarder, simply execute this file.
+"""
 
 import threading
 import time
@@ -11,39 +16,45 @@ from mods.receiver import SnmpTrapReceiver
 from mods.scheduler import Scheduler
 from mods.config import Config
 
-# get directory name
-basedir = os.path.dirname(__file__)
+def main():
+    """main function"""
 
-# get configuration
-config = Config(basedir + "/etc/config.conf")
-class_name_forwarder = config.get_value('general', 'forwarder', 'StdoutForwarder')
-class_name_receiver = config.get_value('general', 'receiver', 'SnmpTrapReceiver')
+    # get directory name
+    basedir = os.path.dirname(__file__)
 
-# create logging config
-logging.basedir = basedir + "/logs"
-logging.config.fileConfig(basedir + "/etc/logging.conf")
+    # get configuration
+    config = Config(basedir + "/etc/config.conf")
+    class_name_forwarder = config.get_value('general', 'forwarder', 'StdoutForwarder')
+    class_name_receiver = config.get_value('general', 'receiver', 'SnmpTrapReceiver')
 
-# create threading event
-run_event = threading.Event()
-run_event.set()
+    # create logging config
+    logging.basedir = basedir + "/logs"
+    logging.config.fileConfig(basedir + "/etc/logging.conf")
 
-# create objects
-forwarder = eval(class_name_forwarder + "(config)")
-scheduler = Scheduler(config, forwarder, run_event)
-receiver = eval(class_name_receiver + "(config, scheduler, run_event)")
+    # create threading event
+    run_event = threading.Event()
+    run_event.set()
 
-# start threads
-scheduler.start()
-receiver.start()
+    # create objects
+    forwarder = eval(class_name_forwarder + "(config)")
+    scheduler = Scheduler(config, forwarder, run_event)
+    receiver = eval(class_name_receiver + "(config, scheduler, run_event)")
 
-try:
-    while 1:
-        time.sleep(1)
-except KeyboardInterrupt:
-    print("Shutting down alarmRetarder:")
-    run_event.clear()
-    print("Shutting down scheduler...")
-    scheduler.join()
-    print("Shutting down receiver...")
-    receiver.join()
-    print("...exited")
+    # start threads
+    scheduler.start()
+    receiver.start()
+
+    try:
+        while 1:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Shutting down alarmRetarder:")
+        run_event.clear()
+        print("Shutting down scheduler...")
+        scheduler.join()
+        print("Shutting down receiver...")
+        receiver.join()
+        print("...exited")
+
+if __name__ == '__main__':
+    main()
