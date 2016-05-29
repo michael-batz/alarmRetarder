@@ -180,7 +180,7 @@ class SnmpTrapReceiver(Receiver):
                 self.schedule_alert(alert_id, alert_type, alert_key,
                                     alert_severity, alert_logmessage)
             elif trap_oid == "1.3.6.1.4.1.99999.3.0.2":
-                self.__logger.info("config trap received: section=%s, key=%s, value=%s",
+                self._logger.info("config trap received: section=%s, key=%s, value=%s",
                                    config_section, config_key, config_value)
                 self.set_config_option(config_section, config_key, config_value)
             else:
