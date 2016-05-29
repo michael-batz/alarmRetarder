@@ -110,7 +110,7 @@ class Scheduler(threading.Thread):
             None.
         """
         self.logger.debug("forward config changed alert")
-        self.forwarder.sendConfigChangedAlert(sectionName, key, oldValue, value)
+        self.forwarder.send_config_changed_alert(sectionName, key, oldValue, value)
 
 
     def forwardAlert(self, alert):
@@ -125,7 +125,7 @@ class Scheduler(threading.Thread):
             None.
         """
         self.logger.debug("forward alert with key %s", alert.get_key())
-        self.forwarder.sendAlert(alert)
+        self.forwarder.send_alert(alert)
         self.lockEvents.acquire()
         self.events[alert.getKey()] = None
         self.lockEvents.release()
@@ -142,7 +142,7 @@ class Scheduler(threading.Thread):
             None.
         """
         self.logger.debug("forward resolved alert with key %s", alert.get_key())
-        self.forwarder.sendAlert(alert)
+        self.forwarder.send_alert(alert)
 
     def run(self):
         """Start the Scheduler.

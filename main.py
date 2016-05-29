@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
-from mods.forwarder.StdoutForwarder import StdoutForwarder
-from mods.forwarder.SmsEagleForwarder import SmsEagleForwarder
+from mods.forwarder.forwarder import StdoutForwarder
+from mods.forwarder.forwarder import SmsEagleForwarder
 from mods.receiver.SnmpTrapReceiver import SnmpTrapReceiver
 from mods.scheduler.Scheduler import Scheduler
 from mods.config.config import Config
