@@ -23,8 +23,8 @@ class StdoutForwarder(Forwarder):
         Returns:
             None.
         """
-        output = "Alert " + alert.getId() + ": "
-        output += alert.getLogmessage()
+        output = "Alert " + alert.get_id() + ": "
+        output += alert.get_logmessage()
 
         self.logger.info("Output: %s", output)
         print(output)

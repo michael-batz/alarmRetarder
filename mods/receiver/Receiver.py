@@ -6,7 +6,7 @@ alarm receives alarms and schedules them as alert in the scheduler.
 
 import threading
 import logging
-from ..entities.Alert import Alert
+from ..entities.entities import Alert
 from ..scheduler.Scheduler import Scheduler
 
 class Receiver(threading.Thread):

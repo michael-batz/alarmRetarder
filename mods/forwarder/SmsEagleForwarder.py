@@ -32,7 +32,7 @@ class SmsEagleForwarder(Forwarder):
         Returns:
             None.
         """
-        self.sendMessage(alert.getLogmessage())
+        self.sendMessage(alert.get_logmessage())
 
     def sendConfigChangedAlert(self, sectionName, key, oldValue, value):
         """Sends out a config changed alert.
