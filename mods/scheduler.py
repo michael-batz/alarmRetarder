@@ -127,7 +127,7 @@ class Scheduler(threading.Thread):
         self.__logger.debug("forward alert with key %s", alert.get_key())
         self.__forwarder.send_alert(alert)
         self.__lock_events.acquire()
-        self.__events[alert.getKey()] = None
+        self.__events[alert.get_key()] = None
         self.__lock_events.release()
 
     def forward_resolved_alert(self, alert):
