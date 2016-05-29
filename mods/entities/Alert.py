@@ -5,7 +5,7 @@ This module defines the class for the entity Alert.
 
 import time
 
-class Alert:
+class Alert(object):
     """Entity Alert.
 
     This is the definition for the entity alert.

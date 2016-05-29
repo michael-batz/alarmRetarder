@@ -7,7 +7,7 @@ options for alarmRetarder.
 import threading
 import configparser
 
-class Config:
+class Config(object):
     """Class for handling configuration.
 
     This class handles the configuration of alarmRetarder. The

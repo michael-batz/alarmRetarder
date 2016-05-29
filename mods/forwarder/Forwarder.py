@@ -5,7 +5,7 @@ This module defines an abstract class for the alarm forwarder.
 """
 import logging
 
-class Forwarder:
+class Forwarder(object):
     """ An Alarm Forwarder.
 
     This is an abstract class for the alarm forwarder. Each
