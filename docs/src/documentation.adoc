@@ -39,6 +39,9 @@ If all the libraries are installed, simply execute main.py and alarmRetarder is 
 ./main.py
 ----
 
+You can also find examples for a systemd service definition and a SystemV init script for Debian/Ubuntu in the contrib directory.
+
+
 === Start a Docker Container
 There is also a Docker image for alarmRetarder on https://hub.docker.com/r/michaelbatz/alarmretarder/[Docker Hub] or you can build it by your own using the _Dockerfile_ in the main directoy of alarmRetarder.
 

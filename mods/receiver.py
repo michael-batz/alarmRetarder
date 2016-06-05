@@ -1,7 +1,6 @@
 """receiver.
 
-This module defines the abstract class for an alarm receiver. An
-alarm receives alarms and schedules them as alert in the scheduler.
+This module defines the receiving part for alarmRetarder.
 """
 
 import threading

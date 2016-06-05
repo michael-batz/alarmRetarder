@@ -1,0 +1,11 @@
+[Unit]
+Description=alarmRetarder
+After=network.target
+
+[Service]
+ExecStart=/opt/alarmRetarder/main.py &
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

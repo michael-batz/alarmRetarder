@@ -1,6 +1,6 @@
 """forwarder.
 
-This module defines an abstract class for the alarm forwarder.
+This module defines the forwarding part of alarm forwarder.
 
 """
 import logging
